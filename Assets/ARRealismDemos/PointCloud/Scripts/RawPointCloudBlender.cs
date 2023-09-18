@@ -341,6 +341,7 @@ public class RawPointCloudBlender : MonoBehaviour
                 tempMax, tempMin, false, tempPoint));
         }
 
+        //Plane optimization
         if (startScan)
         {
             foreach (ARPlane plane in eventArgs.updated)
@@ -353,7 +354,6 @@ public class RawPointCloudBlender : MonoBehaviour
                     if ((pos.x >= 0 && pos.x <= 1 && pos.y >= 0 && pos.y <= 1 && pos.z > 0) ||
                         (bPos.x >= 0 && bPos.x <= 1 && bPos.y >= 0 && bPos.y <= 1 && bPos.z > 0))
                     {
-                        //do something
                         int index = _planeList.FindIndex(x => x.planeID == plane.trackableId);
                         if (index == -1)
                             break;
@@ -598,8 +598,7 @@ public class RawPointCloudBlender : MonoBehaviour
                                     tempPlane.planeValid = true;
                                     break;
                                 }
-                                //not max xz size only valid xz!!!!!!!!!!!!!!!!
-                                //or mahattan assumption?
+                                //mahattan assumption
                             }
                         }
 
@@ -698,6 +697,7 @@ public class RawPointCloudBlender : MonoBehaviour
         image.GetPlane(2).data.CopyTo(_cameraBufferV);
     }
 
+    //Write Log
     public void writeFile()
     {
         string path = pathForDocumentsFile("pointCloudLog.txt");
@@ -894,16 +894,13 @@ private void UpdateRawPointCloud()
         }
     }
 
-    /// <summary>
     /// Converts a YUV color value into RGB. Input YUV values are expected in the range [0, 255].
-    /// </summary>
     /// <param name="y">The pixel value of the Y plane in the range [0, 255].</param>
     /// <param name="u">The pixel value of the U plane in the range [0, 255].</param>
     /// <param name="v">The pixel value of the V plane in the range [0, 255].</param>
     /// <returns>RGB values are in the range [0.0, 1.0].</returns>
     private byte[] ConvertYuvToRgb(byte y, byte u, byte v)
     {
-        // See https://en.wikipedia.org/wiki/YUV.
         float yFloat = y / 255.0f; // Range [0.0, 1.0].
         float uFloat = (u * 0.872f / 255.0f) - 0.436f; // Range [-0.436, 0.436].
         float vFloat = (v * 1.230f / 255.0f) - 0.615f; // Range [-0.615, 0.615].
