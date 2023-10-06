@@ -15,9 +15,6 @@ using OpenCVForUnity.UnityUtils;
 using OpenCVForUnity.ImgprocModule;
 using OpenCVForUnity.Calib3dModule;
 
-/// <summary>
-/// Computes a point cloud from the depth map on the CPU.
-/// </summary>
 public class RawPointCloudBlender : MonoBehaviour
 {
     /// <summary>
