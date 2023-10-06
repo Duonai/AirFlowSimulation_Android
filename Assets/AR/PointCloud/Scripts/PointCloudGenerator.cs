@@ -98,7 +98,7 @@ public class RawPointCloudBlender : MonoBehaviour
         }
     }
 
-    //Denoise grid
+    //Denoise grid for decrease point cloud error
     private int denoiseCount = 0;
     private denoiseGrid[] denoiseGridArray;
     private List<Vector3> denoiseVertices;
@@ -308,7 +308,6 @@ public class RawPointCloudBlender : MonoBehaviour
             if (shouldAccumulate() && startScan)
             {
                 UpdateRawPointCloud();
-                calcEssen(_prevTexture, _currTexture);
                 addOptList();
             }
         }
@@ -1319,7 +1318,7 @@ private void UpdateRawPointCloud()
         buffer.Dispose();
     }
 
-    Mat calcEssen(Texture2D prev, Texture2D curr)
+    Vector3 calcEssen(Texture2D prev, Texture2D curr)
     {
         if (firstImage)
         {
@@ -1453,11 +1452,11 @@ private void UpdateRawPointCloud()
                 else
                     Debug.Log("DirDist: " + Vector3.Distance(newDirVec, currDir));
 
-                return Mat.eye(3, 3, CvType.CV_64F);
+                return newDirVec;
             }
         }
 
-        return Mat.eye(3, 3, CvType.CV_64F);
+        return new Vector3(0,0,0);
     }
 
     float calcMatch(Texture2D prev, Texture2D curr)
@@ -1527,16 +1526,16 @@ private void UpdateRawPointCloud()
     {
         int listNum = _optList.Count;
 
-        for(int i = listNum-1; i > 0; i--)
+        for(int i = listNum-1; i > 1; i--)
         {
             Vector2 cameraPoint = new Vector2();
 
             int depthIndex = ((int)cameraPoint.y * DepthSource.DepthWidth) + (int)cameraPoint.x;
             float depthInM = 0; // = depthArray[depthIndex] * DepthSource.MillimeterToMeter;
 
-            // Computes world-space coordinates.
-            Vector3 vertex = DepthSource.TransformVertexToWorldSpace(
-                DepthSource.ComputeVertex((int)cameraPoint.x, (int)cameraPoint.y, depthInM));
+            Vector3 dirVec = calcEssen(_optList[i].frame, _optList[i-1].frame);
+            for (int j = _optList[i - 1].index; i < _optList[i].index; j++)
+                _vertices[j] += dirVec;
         }
     }
 }

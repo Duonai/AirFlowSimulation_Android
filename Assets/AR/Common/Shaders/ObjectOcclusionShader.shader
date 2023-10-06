@@ -18,7 +18,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-Shader "ARRealism/Object Occlusion Shader"
+Shader "AR/Object Occlusion Shader"
 {
     Properties
     {
@@ -57,7 +57,7 @@ Shader "ARRealism/Object Occlusion Shader"
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.0
 
-        #include "Assets/ARRealismDemos/Common/Shaders/ARCoreDepth.cginc"
+        #include "Assets/AR/Common/Shaders/ARCoreDepth.cginc"
 
         struct Input
         {
