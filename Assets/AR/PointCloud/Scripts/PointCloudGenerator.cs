@@ -15,7 +15,7 @@ using OpenCVForUnity.UnityUtils;
 using OpenCVForUnity.ImgprocModule;
 using OpenCVForUnity.Calib3dModule;
 
-public class RawPointCloudBlender : MonoBehaviour
+public class PointCloudGenerator : MonoBehaviour
 {
     /// <summary>
     /// Type of depth texture to attach to the material.
